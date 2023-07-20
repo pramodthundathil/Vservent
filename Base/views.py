@@ -24,3 +24,19 @@ def ViewFoodMenu(request):
     data = FoodMenu.objects.all()
     serializer = FoodMenuSerializer(data,many=True)
     return Response(serializer.data)
+
+@api_view(['POST'])
+def AddFoodMenu(request):
+    serializer = FoodMenuSerializer(data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response("Data is Not valid")
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def FoodmenuCategoryView(request,pk):
+    cat = FoodCategory.objects.get(id = pk)
+    data = FoodMenu.objects.filter(food_category = cat )
+    serializer = FoodMenuSerializer(data, many=True)
+    return Response(serializer.data)
